@@ -11,3 +11,13 @@ dependencies:
 library:
   source-dirs: src
   exposed-modules: WordSearch
+
+tests:
+  spec:
+    main: Main.hs
+    source-dirs: tests
+    dependencies:
+      - base
+      - containers
+      - hspec
+      - wordsearch

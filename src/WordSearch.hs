@@ -1,4 +1,11 @@
-module WordSearch where
+module WordSearch
+    ( Graph
+    , Dict(Dict)
+    , findPaths
+    , dictFromList
+    , graphGrid
+    )
+    where
 
 import qualified Data.Map as Map
 import           Data.Map (Map)
@@ -90,27 +97,6 @@ graphGrid width height =
         [ 1 .. width * height ]
 
 
--- example
-
-ex :: [ [ Int ] ]
-ex =
-    findPaths
-        (graphGrid 2 2)
-        (Map.fromList [ ( 1, 'b' ), ( 2, 'a' ), ( 3, 't' ), ( 4, 'n' ) ])
-        (dictFromList
-            [ "an"
-            , "ana"
-            , "and"
-            , "ant"
-            , "anti"
-            , "bad"
-            , "bat"
-            , "bot"
-            , "boy"
-            ]
-        )
-
-
 -- helpers
 
 infixl 0 |>
@@ -123,83 +109,3 @@ infixl 9 .>
 (.>) :: (a -> b) -> (b -> c) -> a -> c
 (.>) f g =
     g . f
-
-
--- tests
-
-tests :: [ Bool ]
-tests =
-    [ let
-        dict1 :: Dict
-        dict1 =
-            Dict False $ Map.fromList
-                [ ( 'a'
-                  , Dict False $ Map.fromList
-                        [ ( 'n'
-                          , Dict True $ Map.fromList
-                                [ ( 'a', Dict True Map.empty )
-                                , ( 'd', Dict True Map.empty )
-                                , ( 't'
-                                  , Dict True $ Map.fromList
-                                        [ ( 'i', Dict True Map.empty )
-                                        ]
-                                  )
-                                ]
-                          )
-                        ]
-                  )
-                , ( 'b'
-                  , Dict False $ Map.fromList
-                        [ ( 'a'
-                          , Dict False $ Map.fromList
-                                [ ( 'd', Dict True Map.empty )
-                                , ( 't', Dict True Map.empty )
-                                ]
-                          )
-                        , ( 'o'
-                          , Dict False $ Map.fromList
-                                [ ( 't', Dict True Map.empty )
-                                , ( 'y', Dict True Map.empty )
-                                ]
-                          )
-                        ]
-                  )
-                ]
-
-        dict2 :: Dict
-        dict2 =
-            dictFromList
-                [ "an"
-                , "ana"
-                , "and"
-                , "ant"
-                , "anti"
-                , "bad"
-                , "bat"
-                , "bot"
-                , "boy"
-                ]
-      in
-      dict1 == dict2
-    , let
-        grid1 =
-            Map.fromList
-                [ ( 1, Set.fromList [ 2, 3, 4] )
-                , ( 2, Set.fromList [ 1, 3, 4] )
-                , ( 3, Set.fromList [ 1, 2, 4] )
-                , ( 4, Set.fromList [ 1, 2, 3] )
-                ]
-
-        grid2 =
-            foldl (\g (x, y) -> graphAddEdges x y g) Map.empty [ (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4) ]
-      in
-      grid1 == grid2
-    , let
-        grid1 =
-            foldl (\g (x, y) -> graphAddEdges x y g) Map.empty [ (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4) ]
-
-        grid2 =
-            graphGrid 2 2
-      in
-      grid1 == grid2
-    ]
