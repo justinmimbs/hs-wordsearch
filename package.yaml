@@ -1,0 +1,13 @@
+name: wordsearch
+version: '0.1.0.0'
+maintainer: Justin Mimbs <justin.mimbs@gmail.com>
+license: BSD3
+
+dependencies:
+  - base >= 4.9 && < 5
+  - containers
+  - mtl
+
+library:
+  source-dirs: src
+  exposed-modules: WordSearch
